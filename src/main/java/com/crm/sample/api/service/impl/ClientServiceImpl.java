@@ -10,9 +10,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import com.crm.sample.api.controller.vo.ClientDTO;
+import com.crm.sample.api.repository.ClientRepository;
+import com.crm.sample.api.repository.model.Client;
 import com.crm.sample.api.service.ClientService;
-import com.crm.sample.repository.ClientRepository;
-import com.crm.sample.repository.model.Client;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,7 +24,7 @@ public class ClientServiceImpl implements ClientService {
 	private ClientRepository clientRepository;
 	
 	@Override
-	@PreAuthorize("hasRole('ADMIN') OR hasRole('EDIT')")
+	@PreAuthorize("hasRole('ADMIN') OR hasRole('USER')")
 	public void addClient(ClientDTO clientVo) {
 		log.info(String.format("addClient:%s", clientVo.toString()));
 		Client clientBo = new Client();
@@ -34,7 +34,16 @@ public class ClientServiceImpl implements ClientService {
 	}
 	
 	@Override
-	@PreAuthorize("hasRole('ADMIN') OR hasRole('EDIT')")
+	@PreAuthorize("hasRole('ADMIN') OR hasRole('USER')")
+	public void addClients(List<ClientDTO> clientVos) {
+		log.info(String.format("addClients:%s", clientVos.toString()));
+		for(ClientDTO clientVo : clientVos) {
+			addClient(clientVo);
+		}
+	}
+	
+	@Override
+	@PreAuthorize("hasRole('ADMIN') OR hasRole('MANAGER')")
 	public void updateClient(ClientDTO clientVo) {
 		log.info(String.format("updateClient:%s", clientVo.toString()));
 		if(null == clientVo.getId()) {
@@ -47,7 +56,7 @@ public class ClientServiceImpl implements ClientService {
 
 	@SuppressWarnings("unused")
 	@Override
-	@PreAuthorize("hasRole('ADMIN') OR hasRole('EDIT')")
+	@PreAuthorize("hasRole('ADMIN') OR hasRole('MANAGER')")
 	public void deleteClient(Long id) {
 		log.info(String.format("deleteClient ID:%s", id.toString()));
 		if(null == id) {
@@ -57,7 +66,7 @@ public class ClientServiceImpl implements ClientService {
 	}
 
 	@Override
-	@PreAuthorize("hasRole('ADMIN') OR hasRole('EDIT') OR hasRole('SEARCH')")
+	@PreAuthorize("hasRole('ADMIN') OR hasRole('MANAGER') OR hasRole('USER')")
 	public List<ClientDTO> findClientByName(String name) {
 		log.info(String.format("findClientByName name:%s", name));
 		if(StringUtils.isBlank(name)) {
@@ -76,7 +85,7 @@ public class ClientServiceImpl implements ClientService {
 	}
 
 	@Override
-	@PreAuthorize("hasRole('ADMIN') OR hasRole('EDIT') OR hasRole('SEARCH')")
+	@PreAuthorize("hasRole('ADMIN') OR hasRole('MANAGER') OR hasRole('USER')")
 	public List<ClientDTO> findClientAll() {
 		
 		List<Client> querys = clientRepository.findAll();

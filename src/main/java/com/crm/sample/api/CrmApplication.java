@@ -21,8 +21,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 @SpringBootApplication
 @EnableAutoConfiguration
-@EntityScan("com.crm.sample.repository.model")
-@EnableJpaRepositories("com.crm.sample.repository")
+@EntityScan("com.crm.sample.api.repository.model")
+@EnableJpaRepositories("com.crm.sample.api.repository")
 public class CrmApplication {
 	
 	public static void main(String[] args) {

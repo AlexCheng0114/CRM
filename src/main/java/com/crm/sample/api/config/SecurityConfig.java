@@ -15,21 +15,22 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-	private static final String[] AUTH_LIST = { "/v2/api-docs", "/configuration/ui", "/swagger-resources/**",
-			"/configuration/security", "/swagger-ui.html", "/webjars/**", "/api/h2-console/**" };
+	private static final String[] AUTH_LIST = { "/api/v2/api-docs", "/configuration/ui", "/swagger-resources/**",
+			"/configuration/security", "/swagger-ui.html" };
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.inMemoryAuthentication()
 			.passwordEncoder(passwordEncoder())
 			.withUser("admin").password(passwordEncoder().encode("123")).roles("ADMIN").and()
-			.withUser("edit").password(passwordEncoder().encode("123")).roles("EDIT").and()
-			.withUser("search").password(passwordEncoder().encode("123")).roles("SEARCH");
+			.withUser("manager").password(passwordEncoder().encode("123")).roles("MANAGER").and()
+			.withUser("user").password(passwordEncoder().encode("123")).roles("USER");
 	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
+		.antMatchers("/api/h2-console/**", "**s/webjars/**").permitAll()
         .antMatchers(AUTH_LIST)
         .authenticated()
         .and()

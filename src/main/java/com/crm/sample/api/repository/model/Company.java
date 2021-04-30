@@ -1,4 +1,4 @@
-package com.crm.sample.repository.model;
+package com.crm.sample.api.repository.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

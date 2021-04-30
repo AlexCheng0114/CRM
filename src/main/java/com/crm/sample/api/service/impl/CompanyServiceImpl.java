@@ -10,9 +10,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import com.crm.sample.api.controller.vo.CompanyDTO;
+import com.crm.sample.api.repository.CompanyRepository;
+import com.crm.sample.api.repository.model.Company;
 import com.crm.sample.api.service.CompanyService;
-import com.crm.sample.repository.CompanyRepository;
-import com.crm.sample.repository.model.Company;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,7 +24,7 @@ public class CompanyServiceImpl implements CompanyService {
 	private CompanyRepository companyRepository;
 	
 	@Override
-	@PreAuthorize("hasRole('ADMIN') OR hasRole('EDIT')")
+	@PreAuthorize("hasRole('ADMIN') OR hasRole('USER')")
 	public void addCompany(CompanyDTO companyVo) {
 		log.info(String.format("addCompany:%s", companyVo.toString()));
 		Company companyBo = new Company();
@@ -34,7 +34,7 @@ public class CompanyServiceImpl implements CompanyService {
 	}
 	
 	@Override
-	@PreAuthorize("hasRole('ADMIN') OR hasRole('EDIT')")
+	@PreAuthorize("hasRole('ADMIN') OR hasRole('MANAGER')")
 	public void updateCompany(CompanyDTO companyVo) {
 		log.info(String.format("updateCompany:%s", companyVo.toString()));
 		if(null == companyVo.getId()) {
@@ -47,7 +47,7 @@ public class CompanyServiceImpl implements CompanyService {
 
 	@SuppressWarnings("unused")
 	@Override
-	@PreAuthorize("hasRole('ADMIN') OR hasRole('EDIT')")
+	@PreAuthorize("hasRole('ADMIN') OR hasRole('MANAGER')")
 	public void deleteCompany(Long id) {
 		log.info(String.format("deleteCompany ID:%s", id.toString()));
 		if(null == id) {
@@ -57,7 +57,7 @@ public class CompanyServiceImpl implements CompanyService {
 	}
 
 	@Override
-	@PreAuthorize("hasRole('ADMIN') OR hasRole('EDIT') OR hasRole('SEARCH')")
+	@PreAuthorize("hasRole('ADMIN') OR hasRole('MANAGER') OR hasRole('USER')")
 	public List<CompanyDTO> findCompanyByName(String name) {
 		log.info(String.format("findCompanyByName name:%s", name));
 		if(StringUtils.isBlank(name)) {
@@ -76,7 +76,7 @@ public class CompanyServiceImpl implements CompanyService {
 	}
 
 	@Override
-	@PreAuthorize("hasRole('ADMIN') OR hasRole('EDIT') OR hasRole('SEARCH')")
+	@PreAuthorize("hasRole('ADMIN') OR hasRole('MANAGER') OR hasRole('USER')")
 	public List<CompanyDTO> findCompanyAll() {
 		
 		List<Company> querys = companyRepository.findAll();

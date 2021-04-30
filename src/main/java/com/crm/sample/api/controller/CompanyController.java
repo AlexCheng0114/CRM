@@ -86,12 +86,12 @@ public class CompanyController {
 
 	@ApiOperation(value = "delete the company data by clientId")
 	@RequestMapping(
-		value = "/{companyId}",
-		method = RequestMethod.DELETE,
-		consumes = { MediaType.APPLICATION_JSON_VALUE },
-		produces = { MediaType.APPLICATION_JSON_VALUE }
-	)
-	public Map<String, Object> deleteCompanyById(@PathVariable("companyId") Long companyId) {
+			value = "/delete",
+			method = RequestMethod.POST,
+			consumes = { MediaType.APPLICATION_JSON_VALUE },
+			produces = { MediaType.APPLICATION_JSON_VALUE }
+		)
+		public Map<String, Object> deleteCompanyById(@Valid @RequestBody Long companyId) {
 		log.info("Enter into deleteCompanyById controller");
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {

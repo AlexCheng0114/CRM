@@ -89,12 +89,12 @@ public class ClientController {
 
 	@ApiOperation(value = "delete the client data by clientId")
 	@RequestMapping(
-		value = "/{clientId}",
-		method = RequestMethod.DELETE,
+		value = "/delete",
+		method = RequestMethod.POST,
 		consumes = { MediaType.APPLICATION_JSON_VALUE },
 		produces = { MediaType.APPLICATION_JSON_VALUE }
 	)
-	public Map<String, Object> deleteClientById(@PathVariable("clientId") Long clientId) {
+	public Map<String, Object> deleteClientById(@Valid @RequestBody Long clientId) {
 		log.info("Enter into deleteUserById controller");
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
@@ -152,6 +152,29 @@ public class ClientController {
 			result.put("message", e.getMessage());
 		} catch (Exception e) {
 			log.error("findClientAll Exception!", e);
+			result.put("message", e.getMessage());
+		}
+		return result;
+	}
+	
+	@ApiOperation(value = "add clients data.")
+	@RequestMapping(
+		value = "/adds",
+		method = RequestMethod.POST,
+		consumes = { MediaType.APPLICATION_JSON_VALUE },
+		produces = { MediaType.APPLICATION_JSON_VALUE }
+	)
+	public Map<String, Object> addClients(@Valid @RequestBody List<ClientDTO> clients)  {
+		log.info("Enter into addClients controller");
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			clientService.addClients(clients);
+			result.put("message", "SUCCESS");
+		} catch (AccessDeniedException e) {
+			log.error("addClients AccessDeniedException!", e);
+			result.put("message", e.getMessage());
+		} catch (Exception e) {
+			log.error("addClients Exception!", e);
 			result.put("message", e.getMessage());
 		}
 		return result;
