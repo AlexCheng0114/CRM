@@ -16,7 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private static final String[] AUTH_LIST = { "/api/v2/api-docs", "/configuration/ui", "/swagger-resources/**",
-			"/configuration/security", "/swagger-ui.html" };
+			"/configuration/security", "/swagger-ui.html", "**s/webjars/**" };
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -29,12 +29,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests()
-		.antMatchers("/api/h2-console/**", "**s/webjars/**").permitAll()
-        .antMatchers(AUTH_LIST)
-        .authenticated()
-        .and()
-        .formLogin().and().csrf().disable();
+		http.authorizeRequests().antMatchers(AUTH_LIST).authenticated()
+		.and().formLogin()
+		.and().authorizeRequests().antMatchers("/console/**").permitAll();
+		http.csrf().disable();
+		http.headers().frameOptions().disable();
 	}
 
 	@Bean
